@@ -1,0 +1,29 @@
+/**
+ * Mai Nou Yang & Nathan Moder
+ * RAM8: Memory of 8 registers, each 16 bits wide.
+ * The chip supports read and write operations, as follows:
+ *     Read:  out(t) = RAM8[address(t)](t)
+ *     Write: If load(t-1)==1 then RAM8[address(t-1)](t) = in(t-1)
+ * In words: the chip always outputs the value stored at the memory
+ * location specified by 'address'. If load==1, the in value is loaded
+ * into the memory location specified by address.  This value becomes
+ * available through the out pin starting from the next time step.
+ */
+
+CHIP RAM8 {
+
+    IN  in[16], load, address[3];
+    OUT out[16];
+
+    PARTS:
+    DMux8Way(in=load, sel=address, a=lOut1, b=lOut2, c=lOut3, d=lOut4, e=lOut5, f=lOut6, g=lOut7, h=lOut8);
+    Register(in=in, load=lOut1, out=out1);
+    Register(in=in, load=lOut2, out=out2);
+    Register(in=in, load=lOut3, out=out3);
+    Register(in=in, load=lOut4, out=out4);
+    Register(in=in, load=lOut5, out=out5);
+    Register(in=in, load=lOut6, out=out6);
+    Register(in=in, load=lOut7, out=out7);
+    Register(in=in, load=lOut8, out=out8);
+    Mux8Way16(a=out1, b=out2, c=out3, d=out4, e=out5, f=out6, g=out7, h=out8, sel=address, out=out);
+}
