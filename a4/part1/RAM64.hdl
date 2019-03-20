@@ -1,0 +1,30 @@
+/**
+ * Mai Nou Yang & Nathan Moder
+ * RAM64: Memory of 64 registers, each 16 bits wide.  
+ * The chip supports read and write operations, as follows:
+ *     Read:  out(t) = RAM64[address(t)](t)
+ *     Write: If load(t-1)==1 then RAM64[address(t-1)](t) = in(t-1)
+ * In words: the chip always outputs the value stored at the memory 
+ * location specified by 'address'. If load==1, the in value is loaded 
+ * into the memory location specified by address.  This value becomes 
+ * available through the out pin starting from the next time step.
+ */
+
+CHIP RAM64 {
+
+    IN  in[16], load, address[6];
+    OUT out[16];
+
+    PARTS:
+    // Implementation missing
+    DMux8Way(in = load , sel[0] = address[0] , sel[1] = address[1] , sel[2] = address[2] , a = l0 , b = l1 , c = l2 , d = l3 , e = l4 , f = l5 , g = l6 , h = l7) ;
+    RAM8(in = in , load = l0 , address[0] = address[3] , address[1] = address[4] , address[2] = address[5] , out = o0) ;
+    RAM8(in = in , load = l1 , address[0] = address[3] , address[1] = address[4] , address[2] = address[5] , out = o1) ;
+    RAM8(in = in , load = l2 , address[0] = address[3] , address[1] = address[4] , address[2] = address[5] , out = o2) ;
+    RAM8(in = in , load = l3 , address[0] = address[3] , address[1] = address[4] , address[2] = address[5] , out = o3) ;
+    RAM8(in = in , load = l4 , address[0] = address[3] , address[1] = address[4] , address[2] = address[5] , out = o4) ;
+    RAM8(in = in , load = l5 , address[0] = address[3] , address[1] = address[4] , address[2] = address[5] , out = o5) ;
+    RAM8(in = in , load = l6 , address[0] = address[3] , address[1] = address[4] , address[2] = address[5] , out = o6) ;
+    RAM8(in = in , load = l7 , address[0] = address[3] , address[1] = address[4] , address[2] = address[5] , out = o7) ;
+    Mux8Way16(a = o0 , b = o1 , c = o2 , d = o3 , e = o4 , f = o5 , g = o6 , h = o7 , sel[0] = address[0] , sel[1] = address[1] , sel[2] = address[2] , out = out) ;
+}

@@ -1,0 +1,25 @@
+/**
+ * Mai Nou Yang & Nathan Moder
+ * RAM16K: Memory of 16,384 registers, each 16 bits wide.  
+ * The chip supports read and write operations, as follows:
+ *     Read:  out(t) = RAM16K[address(t)](t)
+ *     Write: If load(t-1)==1 then RAM16K[address(t-1)](t) = in(t-1)
+ * In words: the chip always outputs the value stored at the memory 
+ * location specified by 'address'. If load==1, the in value is loaded 
+ * into the memory location specified by address.  This value becomes 
+ * available through the out pin starting from the next time step.
+ */
+CHIP RAM16K {
+
+    IN  in[16], load, address[14];
+    OUT out[16];
+
+    PARTS:
+    // Implementation missing
+    DMux4Way(in = load , sel[0] = address[0] , sel[1] = address[1] , a = l0 , b = l1 , c = l2 , d = l3) ;
+    RAM4K(in = in , load = l0 , address[0] = address[2] , address[1] = address[3] , address[2] = address[4] , address[3] = address[5] , address[4] = address[6] , address[5] = address[7] , address[6] = address[8] , address[7] = address[9] , address[8] = address[10] , address[9] = address[11] , address[10] = address[12] , address[11] = address[13] , out = o0) ;
+    RAM4K(in = in , load = l1 , address[0] = address[2] , address[1] = address[3] , address[2] = address[4] , address[3] = address[5] , address[4] = address[6] , address[5] = address[7] , address[6] = address[8] , address[7] = address[9] , address[8] = address[10] , address[9] = address[11] , address[10] = address[12] , address[11] = address[13] , out = o1) ;
+    RAM4K(in = in , load = l2 , address[0] = address[2] , address[1] = address[3] , address[2] = address[4] , address[3] = address[5] , address[4] = address[6] , address[5] = address[7] , address[6] = address[8] , address[7] = address[9] , address[8] = address[10] , address[9] = address[11] , address[10] = address[12] , address[11] = address[13] , out = o2) ;
+    RAM4K(in = in , load = l3 , address[0] = address[2] , address[1] = address[3] , address[2] = address[4] , address[3] = address[5] , address[4] = address[6] , address[5] = address[7] , address[6] = address[8] , address[7] = address[9] , address[8] = address[10] , address[9] = address[11] , address[10] = address[12] , address[11] = address[13] , out = o3) ;
+    Mux4Way16(a = o0 , b = o1 , c = o2 , d = o3 , sel[0] = address[0] , sel[1] = address[1] , out = out) ;
+}

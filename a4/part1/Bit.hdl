@@ -1,0 +1,19 @@
+/**
+ * Mai Nou Yang & Nathan Moder
+ *  1-bit register
+ *  if (load[t-1] == 1) 
+ *  then out[t] = in[t-1]
+ *  else out[t] = out[t-1]       // i.e., out does not change
+ */
+
+CHIP Bit {
+
+    IN  in, load;
+    OUT out;
+
+    PARTS:
+    // Implementation missing
+    Mux(a = DFFout , b = in , sel = load , out = data) ;
+    DFF(in = data , out = DFFout) ;
+    Or(a = DFFout , b = DFFout , out = out) ;
+}
